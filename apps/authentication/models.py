@@ -5,9 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 class User(AbstractBaseUser, PermissionsMixin):
-
-    username_validator = UnicodeUsernameValidator()
-
     username = models.CharField(
         _("username"),
         max_length=150,
@@ -15,7 +12,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text=_(
             "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
         ),
-        validators=[username_validator],
+        validators=[UnicodeUsernameValidator()],
         error_messages={
             "unique": _("A user with that username already exists."),
         },
@@ -47,3 +44,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
+
+    def __str__(self):
+        if self.last_name == "" and self.first_name == "":
+            return self.username
+        return f"{self.last_name} {self.first_name}"
