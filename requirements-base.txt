@@ -1,1 +1,1 @@
-Django=={{ django_version }}
+Django
